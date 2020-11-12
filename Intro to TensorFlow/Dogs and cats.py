@@ -39,7 +39,7 @@ train_dogs_dir = os.path.join(train_dir, 'dogs')
 # directory with our validation cat pictures
 validation_cats_dir = os.path.join(validation_dir, 'cats')
 
- # directory with our validation dog pictures
+# directory with our validation dog pictures
 validation_dogs_dir = os.path.join(validation_dir, 'dogs')
 
 num_cats_tr = len(os.listdir(train_cats_dir))
