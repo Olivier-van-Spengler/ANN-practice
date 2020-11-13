@@ -7,12 +7,15 @@ from load_data import load_mat
 dataset = (load_mat('dataset.mat'))
 labelset = (load_mat('label.mat'))
 
-labels = pd.get_dummies(pd.Series(tuple(labelset)))
+print(labelset['label'].shape)
+
+
+labels = pd.get_dummies(pd.Series(labelset['label']))
 # Make dummy variables for rank
 #data = pd.concat([labelset, pd.get_dummies(labelset['label'], prefix='label')], axis=1)
 #data = data.drop('label', axis=1)
-
 print(labels)
+
 # Check that dataset is a tuple
 print('dataset has type:', type(dataset))
 print('dataset has type:', type(labelset))
