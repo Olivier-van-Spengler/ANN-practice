@@ -3,17 +3,22 @@ import tensorflow_datasets as tfds
 import numpy as np
 from load_data import load_mat
 
-dataset, Y = (load_mat('dataset.mat'))
+dataset = (load_mat('dataset.mat'))
+#label = load_mat('label.mat')
 
 # Check that dataset is a tuple
 print('dataset has type:', type(dataset))
+#print('dataset has type:', type(label))
 
 # Print the number of elements in dataset
-print('dataset has {:,} elements '.format(len(dataset)))
+print('dataset has {:,} elements '.format(dataset['data']))
 # Does not give correct output
 
 # TODO: Need to split data
 # TODO: Create pipeline??
+
+N = 3
+#length
 
 # Model
 model = tf.keras.Sequential([

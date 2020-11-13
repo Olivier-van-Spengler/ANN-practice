@@ -31,3 +31,4 @@ for i = 1:Size
     data{end+1} = Y;
 end
 save('dataset.mat','data')
+save('label.mat', 'label')
