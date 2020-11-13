@@ -3,7 +3,7 @@ import tensorflow_datasets as tfds
 import numpy as np
 from load_data import load_mat
 
-dataset = tuple(load_mat('dataset.mat'))
+dataset, Y = (load_mat('dataset.mat'))
 
 # Check that dataset is a tuple
 print('dataset has type:', type(dataset))
@@ -12,15 +12,15 @@ print('dataset has type:', type(dataset))
 print('dataset has {:,} elements '.format(len(dataset)))
 # Does not give correct output
 
-# TODO: need to split data
+# TODO: Need to split data
 # TODO: Create pipeline??
 
 # Model
 model = tf.keras.Sequential([
-             tf.keras.Input(shape=8,),
-             tf.keras.layers.Dense(128,  activation = 'relu'),
+             tf.keras.Input(shape=10,),
              tf.keras.layers.Dense(64, activation = 'relu'),
-             tf.keras.layers.Dense(10, activation = 'softmax')
+             tf.keras.layers.Dense(32, activation = 'relu'),
+             tf.keras.layers.Dense(N, activation = 'softmax')
 ])
 
 model.summary()
