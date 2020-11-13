@@ -1,4 +1,17 @@
 import tensorflow as tf
+<<<<<<< HEAD:main.py
+from matlab.load_data import load_label,load_data
+
+labels = load_label('labels.mat')
+dataset = load_data('dataset.mat')
+
+tf_dataset = tf.data.Dataset.from_tensor_slices((dataset,labels))
+
+i = 0
+for element,label in tf_dataset:
+    i += 1
+    print(f'Trajectory {i} | System {label}: {element}')
+=======
 import pandas as pd
 import tensorflow_datasets as tfds
 import numpy as np
@@ -19,13 +32,11 @@ print(labels)
 # Check that dataset is a tuple
 print('dataset has type:', type(dataset))
 print('dataset has type:', type(labelset))
+>>>>>>> d2dfe78a590c8d7a315309f96561ef94940c85fa:MLP/main.py
 
-# Print the number of elements in dataset
-print('dataset has {:,} elements '.format(dataset['data']))
-# Does not give correct output
 
 # TODO: Need to split data
-# TODO: Create pipeline??
+# TODO: Create pipeline
 
 N = 3
 #length
@@ -62,4 +73,5 @@ for i, layer in enumerate(model.layers):
         print('\nLayer {}: {}\n'.format(i, layer.name))
         print('This layer has no weights or biases.')
         print('\n------------------------')
+
 
