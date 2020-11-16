@@ -13,32 +13,13 @@ i = 0
 for element,label in tf_dataset:
     i += 1
     print(f'Trajectory {i} | System {label}: {element}')
+
 #=======
-import pandas as pd
-#from load_data import load_mat
-
-#dataset = (load_mat('dataset.mat'))
-#labelset = (load_mat('label.mat'))
-
-#print(labelset['label'].shape)
-
-
-#labels = pd.get_dummies(pd.Series(labelset['label']))
-# Make dummy variables for rank
-#data = pd.concat([labelset, pd.get_dummies(labelset['label'], prefix='label')], axis=1)
-#data = data.drop('label', axis=1)
-#print(labels)
-
-# Check that dataset is a tuple
-print('dataset has type:', type(dataset))
-print('dataset has type:', type(labels))
-
-#mat_dataset = np.asmatrix(tf_dataset)
-#print(mat_dataset)
 
 #>>>>>>> d2dfe78a590c8d7a315309f96561ef94940c85fa:MLP/main.py
 
 # TODO: One hot encode
+#One Hot Encode
 
 ohe_labels = np.zeros((labels.size, labels.max()))
 ohe_labels[np.arange(labels.size), labels-1] = 1
@@ -47,7 +28,10 @@ ohe_labels[np.arange(labels.size), labels-1] = 1
 
 # TODO: Need to split data
 
-element_train, element_test, label_train, label_test = train_test_split(element, label, test_size=0.2)
+#split = tf.split(tf_dataset, 90)
+#print(split)
+
+element_train, element_test, label_train, label_test = train_test_split(dataset, ohe_labels, test_size=0.2)
 
 # TODO: Create pipeline
 
@@ -66,7 +50,7 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-loss, accuracy = model.evaluate(testing_batches)
+#loss, accuracy = model.evaluate(testing_batches)
 
 model.summary()
 
@@ -93,4 +77,5 @@ for i, layer in enumerate(model.layers):
         print('This layer has no weights or biases.')
         print('\n------------------------')
 
-
+result = model.fit(dataset,ohe_labels, 10)
+print(result)
