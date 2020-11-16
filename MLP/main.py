@@ -79,5 +79,20 @@ for i, layer in enumerate(model.layers):
         print('This layer has no weights or biases.')
         print('\n------------------------')
 
-result = model.fit(element,label, 10)
-print(result)
+print(element_train.shape)
+print(type(element_train))
+print(label_train.shape)
+print(type(label_train))
+
+
+history = model.fit(
+    element_train,
+    label_train,
+    batch_size=10,
+    epochs=5,
+    # We pass some validation for
+    # monitoring validation loss and metrics
+    # at the end of each epoch
+    validation_data=(element_test, label_test),
+)
+print(history)
