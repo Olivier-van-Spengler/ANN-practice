@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 #<<<<<<< HEAD:main.py
 from MLP.load_data import load_label,load_data
 
@@ -19,28 +20,18 @@ for element,label in tf_dataset:
 
 #>>>>>>> d2dfe78a590c8d7a315309f96561ef94940c85fa:MLP/main.py
 
-# TODO: One hot encode
-#One Hot Encode
-#LABELS = tf.one_hot(label in tf_dataset, 4)
+# One hot encode
 ohe_labels = np.zeros((labels.size, labels.max()))
 ohe_labels[np.arange(labels.size), labels-1] = 1
-#print(len(ohe_labels))
-#print(type(ohe_labels))
 
-# TODO: Need to split data
-
-#split = tf.split(tf_dataset, 90)
-#print(split)
-
+# Split data
 element_train, element_test, label_train, label_test = train_test_split(dataset, ohe_labels, test_size=0.2)
 
-# TODO: Create pipeline
-
+# Create pipeline
 N = 3
 length = len(tf_dataset)
 
-
-# Model
+# Build model
 model = tf.keras.Sequential([
              tf.keras.Input(shape=10,),
              tf.keras.layers.Dense(64, activation = 'relu'),
@@ -52,47 +43,58 @@ model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
-#loss, accuracy = model.evaluate(testing_batches)
-
 model.summary()
 
+# Setting weights and biases
 model_weights_biases = model.get_weights()
 
 print('\nThere are {:,} NumPy ndarrays in our list\n'.format(len(model_weights_biases)))
 
-print(model_weights_biases)
+#print(model_weights_biases)
 
-for i, layer in enumerate(model.layers):
+#for i, layer in enumerate(model.layers):
 
-    if len(layer.get_weights()) > 0:
-        w = layer.get_weights()[0]
-        b = layer.get_weights()[1]
+ #   if len(layer.get_weights()) > 0:
+  #      w = layer.get_weights()[0]
+  #      b = layer.get_weights()[1]
 
-        print('\nLayer {}: {}\n'.format(i, layer.name))
-        print('\u2022 Weights:\n', w)
-        print('\n\u2022 Biases:\n', b)
-        print('\nThis layer has a total of {:,} weights and {:,} biases'.format(w.size, b.size))
-        print('\n------------------------')
+ #       print('\nLayer {}: {}\n'.format(i, layer.name))
+  #      print('\u2022 Weights:\n', w)
+ #       print('\n\u2022 Biases:\n', b)
+  #      print('\nThis layer has a total of {:,} weights and {:,} biases'.format(w.size, b.size))
+  #      print('\n------------------------')
 
-    else:
-        print('\nLayer {}: {}\n'.format(i, layer.name))
-        print('This layer has no weights or biases.')
-        print('\n------------------------')
+ #   else:
+ #       print('\nLayer {}: {}\n'.format(i, layer.name))
+  #      print('This layer has no weights or biases.')
+  #      print('\n------------------------')
 
-print(element_train.shape)
-print(type(element_train))
-print(label_train.shape)
-print(type(label_train))
+# Training
+epochs = 5
+batch_size = 10
 
-
-history = model.fit(
-    element_train,
-    label_train,
-    batch_size=10,
-    epochs=5,
-    # We pass some validation for
-    # monitoring validation loss and metrics
-    # at the end of each epoch
-    validation_data=(element_test, label_test),
-)
+history = model.fit(element_train,label_train,batch_size=batch_size,epochs=epochs,validation_data=(element_test, label_test),)
 print(history)
+
+training_accuracy = history.history['accuracy']
+validation_accuracy = history.history['val_accuracy']
+
+training_loss = history.history['loss']
+validation_loss = history.history['val_loss']
+
+epochs_range = range(epochs)
+
+# Plotting results
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
+plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training and Validation Accuracy')
+
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, training_loss, label='Training Loss')
+plt.plot(epochs_range, validation_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+plt.show()
