@@ -49,7 +49,7 @@ model = tf.keras.Sequential([
 ])
 
 model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
+              loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 #loss, accuracy = model.evaluate(testing_batches)
