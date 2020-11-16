@@ -22,7 +22,7 @@ print('\t\u2022 Running on GPU' if tf.test.is_gpu_available() else '\t\u2022 GPU
 
 # Load training data
 training_set, dataset_info = tfds.load('mnist', split = 'train', as_supervised = True, with_info = True)
-
+print(type(training_set))
 num_classes = dataset_info.features['label'].num_classes
 print('There are {:,} classes in our dataset'.format(num_classes))
 

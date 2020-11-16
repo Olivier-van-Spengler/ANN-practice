@@ -8,6 +8,7 @@ labels = load_label('labels.mat')
 dataset = load_data('dataset.mat')
 
 tf_dataset = tf.data.Dataset.from_tensor_slices((dataset,labels))
+print(type(tf_dataset))
 
 i = 0
 for element,label in tf_dataset:
@@ -20,7 +21,7 @@ for element,label in tf_dataset:
 
 # TODO: One hot encode
 #One Hot Encode
-
+#LABELS = tf.one_hot(label in tf_dataset, 4)
 ohe_labels = np.zeros((labels.size, labels.max()))
 ohe_labels[np.arange(labels.size), labels-1] = 1
 #print(len(ohe_labels))
@@ -37,6 +38,7 @@ element_train, element_test, label_train, label_test = train_test_split(dataset,
 
 N = 3
 length = len(tf_dataset)
+
 
 # Model
 model = tf.keras.Sequential([
@@ -77,5 +79,5 @@ for i, layer in enumerate(model.layers):
         print('This layer has no weights or biases.')
         print('\n------------------------')
 
-result = model.fit(dataset,ohe_labels, 10)
+result = model.fit(element,label, 10)
 print(result)
