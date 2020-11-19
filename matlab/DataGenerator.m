@@ -7,7 +7,7 @@ m = 1;   %input
 p = 1;   %output
 
 N = 3;  %Number of classes/systems
-Size = 100; %Dataset size
+Size = 1000; %Dataset size
 
 syss = {};
 T = 10; %samples per trajectory
@@ -30,5 +30,5 @@ for i = 1:Size
     [Y,Td,X] = lsim(sys,U,time,x_0); %x0=[0,0]
     data{end+1} = Y;
 end
-save('dataset.mat','data')
-save('labels.mat', 'label')
+save('dataset2.mat','data')
+save('labels2.mat', 'label')

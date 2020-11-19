@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 #<<<<<<< HEAD:main.py
 from MLP.load_data import load_label,load_data
 
-labels = load_label('labels.mat')
-dataset = load_data('dataset.mat')
+labels = load_label('../matlab/labels2.mat')
+dataset = load_data('../matlab/dataset2.mat')
 
 tf_dataset = tf.data.Dataset.from_tensor_slices((dataset,labels))
 print(type(tf_dataset))
@@ -72,7 +72,7 @@ print('\nThere are {:,} NumPy ndarrays in our list\n'.format(len(model_weights_b
   #      print('\n------------------------')
 
 # Training
-epochs = 5
+epochs = 10
 batch_size = 5
 
 history = model.fit(element_train,label_train,batch_size=batch_size,epochs=epochs,validation_data=(element_test, label_test),)
