@@ -26,7 +26,7 @@ ohe_labels[np.arange(labels.size), labels-1] = 1
 
 # Split data
 element_train, element_test, label_train, label_test = train_test_split(dataset, ohe_labels, test_size=0.2)
-
+print(type(element_test))
 # Create pipeline
 N = 3
 length = len(tf_dataset)
@@ -34,10 +34,13 @@ length = len(tf_dataset)
 # Build model
 model = tf.keras.Sequential([
              tf.keras.Input(shape=10,),
-             tf.keras.layers.Dense(64, activation = 'relu'),
              tf.keras.layers.Dropout(.1),
-             tf.keras.layers.Dense(32, activation = 'relu'),
-             tf.keras.layers.Dropout(.1),
+             tf.keras.layers.Dense(500, activation = 'relu'),
+             tf.keras.layers.Dropout(.2),
+             tf.keras.layers.Dense(500, activation = 'relu'),
+             tf.keras.layers.Dropout(.2),
+             tf.keras.layers.Dense(500, activation='relu'),
+             tf.keras.layers.Dropout(.3),
              tf.keras.layers.Dense(N, activation = 'softmax')
 ])
 
@@ -75,7 +78,11 @@ print('\nThere are {:,} NumPy ndarrays in our list\n'.format(len(model_weights_b
 epochs = 10
 batch_size = 5
 
-history = model.fit(element_train,label_train,batch_size=batch_size,epochs=epochs,validation_data=(element_test, label_test),)
+history = model.fit(element_train,
+                    label_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    validation_data=(element_test, label_test),)
 print(history)
 
 training_accuracy = history.history['accuracy']
