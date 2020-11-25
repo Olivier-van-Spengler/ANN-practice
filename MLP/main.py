@@ -94,20 +94,19 @@ validation_loss = history.history['val_loss']
 epochs_range = range(epochs)
 
 # Plotting results
-#plt.figure(figsize=(8, 8))
-#plt.subplot(1, 2, 1)
-#plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
-#plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
-#plt.legend(loc='lower right')
-#plt.title('Training and Validation Accuracy')
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
+plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training and Validation Accuracy')
 
-#plt.subplot(1, 2, 2)
-#plt.plot(epochs_range, training_loss, label='Training Loss')
-#plt.plot(epochs_range, validation_loss, label='Validation Loss')
-#plt.legend(loc='upper right')
-#plt.title('Training and Validation Loss')
-#plt.show()
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, training_loss, label='Training Loss')
+plt.plot(epochs_range, validation_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+plt.show()
 
 
 # Saving results
-print(history.history)
