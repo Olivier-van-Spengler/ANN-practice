@@ -14,7 +14,10 @@ test_x, test_y = load_from_arff_to_dataframe(
     os.path.join(".", "FordA_TEST.arff")
 )
 
+print(type(train_x))
 print(train_x.size)
+print(train_x.shape)
+train_x = np.reshape(3601, 500)
 print(train_x.shape)
 # Convert to numpy.ndarray
 #train_x = np.ndarray(train_x)
@@ -31,17 +34,18 @@ test_y = pd.DataFrame(test_y).to_numpy()
 #test_y = np.asarray(test_y).astype(np.float32)
 
 print(type(train_x))
-
+print((train_x[0:2]))
 # One hot encode
 
 # Create pipeline
 N = 2
 length = len(train_x)
-
+InputShape = len(train_x[0])
+print(InputShape)
 
 # Build model
 model = tf.keras.Sequential([
-             tf.keras.Input(shape=10,),
+             tf.keras.Input(shape=500,),
              tf.keras.layers.Dropout(.1),
              tf.keras.layers.Dense(500, activation = 'relu'),
              tf.keras.layers.Dropout(.2),
