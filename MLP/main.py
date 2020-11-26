@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 #<<<<<<< HEAD:main.py
 from MLP.load_data import load_label,load_data
 
-labels = load_label('../matlab/labels2.mat')
-dataset = load_data('../matlab/dataset2.mat')
+labels = load_label('../matlab/labels3.mat')
+dataset = load_data('../matlab/dataset3.mat')
+print(type(labels))
+print(max(labels))
 
 tf_dataset = tf.data.Dataset.from_tensor_slices((dataset,labels))
 print(type(tf_dataset))
@@ -28,7 +30,7 @@ ohe_labels[np.arange(labels.size), labels-1] = 1
 element_train, element_test, label_train, label_test = train_test_split(dataset, ohe_labels, test_size=0.2)
 print(type(element_test))
 # Create pipeline
-N = 3
+N = max(labels)
 length = len(tf_dataset)
 
 # Build model
