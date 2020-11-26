@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 #<<<<<<< HEAD:main.py
 from MLP.load_data import load_label,load_data
 
-labels = load_label('../matlab/labels3.mat')
-dataset = load_data('../matlab/dataset3.mat')
+labels = load_label('../matlab/l_10_1000_n.mat')
+dataset = load_data('../matlab/d_10_1000_n.mat')
 print(type(labels))
 print(max(labels))
 
@@ -14,9 +14,9 @@ tf_dataset = tf.data.Dataset.from_tensor_slices((dataset,labels))
 print(type(tf_dataset))
 
 i = 0
-for element,label in tf_dataset:
-    i += 1
-    print(f'Trajectory {i} | System {label}: {element}')
+#for element,label in tf_dataset:
+#    i += 1
+#    print(f'Trajectory {i} | System {label}: {element}')
 
 #=======
 
@@ -29,6 +29,7 @@ ohe_labels[np.arange(labels.size), labels-1] = 1
 # Split data
 element_train, element_test, label_train, label_test = train_test_split(dataset, ohe_labels, test_size=0.2)
 print(type(element_test))
+print(element_train.shape)
 # Create pipeline
 N = max(labels)
 length = len(tf_dataset)
@@ -96,19 +97,19 @@ validation_loss = history.history['val_loss']
 epochs_range = range(epochs)
 
 # Plotting results
-plt.figure(figsize=(8, 8))
-plt.subplot(1, 2, 1)
-plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
-plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
-plt.legend(loc='lower right')
-plt.title('Training and Validation Accuracy')
+#plt.figure(figsize=(8, 8))
+#plt.subplot(1, 2, 1)
+#plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
+#plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
+#plt.legend(loc='lower right')
+#plt.title('Training and Validation Accuracy')
 
-plt.subplot(1, 2, 2)
-plt.plot(epochs_range, training_loss, label='Training Loss')
-plt.plot(epochs_range, validation_loss, label='Validation Loss')
-plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
-plt.show()
+#plt.subplot(1, 2, 2)
+#plt.plot(epochs_range, training_loss, label='Training Loss')
+#plt.plot(epochs_range, validation_loss, label='Validation Loss')
+#plt.legend(loc='upper right')
+#plt.title('Training and Validation Loss')
+#plt.show()
 
 
 # Saving results

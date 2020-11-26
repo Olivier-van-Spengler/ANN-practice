@@ -33,11 +33,10 @@ for i = 1:Size
     U = u0;
     x_0 = rand(n,1);
     [Y,Td,X] = lsim(sys,U,time,x_0); %x0=[0,0]
-    data{end+1} = Y;
     Ey = (a + (b-a).*rand(size(Y)))*w_test; %noise
     Yz = Y + Ey;
     data{end+1} = Yz;
 end
 
-save('dataset3.mat','data')
-save('labels3.mat', 'label')
+save('d_10_1000_n.mat','data')
+save('l_10_1000_n.mat', 'label')
