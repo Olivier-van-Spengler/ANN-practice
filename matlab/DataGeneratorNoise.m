@@ -38,5 +38,5 @@ for i = 1:Size
     data{end+1} = Yz;
 end
 
-save('d_10_1000_n.mat','data')
-save('l_10_1000_n.mat', 'label')
+save('d_10_1000_n1.mat','data')
+save('l_10_1000_n1.mat', 'label')

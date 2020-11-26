@@ -1,12 +1,14 @@
 import tensorflow as tf
 import numpy as np
 from sklearn.model_selection import train_test_split
+import pandas as pd
 import matplotlib.pyplot as plt
-#<<<<<<< HEAD:main.py
+
 from MLP.load_data import load_label,load_data
 
-labels = load_label('../matlab/l_10_1000_n.mat')
-dataset = load_data('../matlab/d_10_1000_n.mat')
+# Import data
+labels = load_label('../matlab/l_10_1000.mat')
+dataset = load_data('../matlab/d_10_1000.mat')
 print(type(labels))
 print(max(labels))
 
@@ -14,13 +16,9 @@ tf_dataset = tf.data.Dataset.from_tensor_slices((dataset,labels))
 print(type(tf_dataset))
 
 i = 0
-#for element,label in tf_dataset:
-#    i += 1
-#    print(f'Trajectory {i} | System {label}: {element}')
-
-#=======
-
-#>>>>>>> d2dfe78a590c8d7a315309f96561ef94940c85fa:MLP/main.py
+for element,label in tf_dataset:
+    i += 1
+    print(f'Trajectory {i} | System {label}: {element}')
 
 # One hot encode
 ohe_labels = np.zeros((labels.size, labels.max()))
@@ -58,25 +56,6 @@ model_weights_biases = model.get_weights()
 
 print('\nThere are {:,} NumPy ndarrays in our list\n'.format(len(model_weights_biases)))
 
-#print(model_weights_biases)
-
-#for i, layer in enumerate(model.layers):
-
- #   if len(layer.get_weights()) > 0:
-  #      w = layer.get_weights()[0]
-  #      b = layer.get_weights()[1]
-
- #       print('\nLayer {}: {}\n'.format(i, layer.name))
-  #      print('\u2022 Weights:\n', w)
- #       print('\n\u2022 Biases:\n', b)
-  #      print('\nThis layer has a total of {:,} weights and {:,} biases'.format(w.size, b.size))
-  #      print('\n------------------------')
-
- #   else:
- #       print('\nLayer {}: {}\n'.format(i, layer.name))
-  #      print('This layer has no weights or biases.')
-  #      print('\n------------------------')
-
 # Training
 epochs = 10
 batch_size = 5
@@ -97,19 +76,24 @@ validation_loss = history.history['val_loss']
 epochs_range = range(epochs)
 
 # Plotting results
-#plt.figure(figsize=(8, 8))
-#plt.subplot(1, 2, 1)
-#plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
-#plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
-#plt.legend(loc='lower right')
-#plt.title('Training and Validation Accuracy')
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
+plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training and Validation Accuracy')
 
-#plt.subplot(1, 2, 2)
-#plt.plot(epochs_range, training_loss, label='Training Loss')
-#plt.plot(epochs_range, validation_loss, label='Validation Loss')
-#plt.legend(loc='upper right')
-#plt.title('Training and Validation Loss')
-#plt.show()
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, training_loss, label='Training Loss')
+plt.plot(epochs_range, validation_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+plt.show()
 
 
 # Saving results
+hist_df = pd.DataFrame(history.history)
+hist_csv_file = 'history.csv'
+with open(hist_csv_file, mode='w') as f:
+    hist_df.to_csv(f)
+
