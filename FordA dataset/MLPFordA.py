@@ -18,21 +18,18 @@ def adapt_data(df):
 
 
 train_x, train_y = load_from_tsfile_to_dataframe(
-    os.path.join('.', "FordA_TEST.ts")
+    os.path.join('.', "FordA_TRAIN.ts")
 )
 test_x, test_y = load_from_tsfile_to_dataframe(
     os.path.join('.', "FordA_TEST.ts")
 )
 
-
 print(type(train_x))
-print(train_x.size)
-print(train_x.shape)
-#train_x = np.reshape(3601, 500)
-print(train_x.shape)
-
 train_x = adapt_data(train_x)
+print(type(train_x))
+#train_x = np.reshape(3601, 500)
 test_x = adapt_data(test_x)
+
 tf_dataset = tf.data.Dataset.from_tensor_slices((train_x, train_y))
 
 # i = 0
@@ -47,10 +44,10 @@ tf_dataset = tf.data.Dataset.from_tensor_slices((train_x, train_y))
 # train_x = np.ndarray(train_x)
 
 # train_x = tf.convert_to_tensor(train_x)
-train_x = pd.DataFrame(train_x).to_numpy()
-train_y = pd.DataFrame(train_y).to_numpy()
-test_x = pd.DataFrame(test_x).to_numpy()
-test_y = pd.DataFrame(test_y).to_numpy()
+#train_x = pd.DataFrame(train_x).to_numpy()
+#train_y = pd.DataFrame(train_y).to_numpy()
+#test_x = pd.DataFrame(test_x).to_numpy()
+#test_y = pd.DataFrame(test_y).to_numpy()
 
 # train_x = np.asarray(train_x).astype(np.float32)
 # train_y = np.asarray(train_y).astype(np.float32)
@@ -77,11 +74,11 @@ model = tf.keras.Sequential([
     tf.keras.layers.Dropout(.2),
     tf.keras.layers.Dense(500, activation='relu'),
     tf.keras.layers.Dropout(.3),
-    tf.keras.layers.Dense(N, activation='softmax')
+    tf.keras.layers.Dense(N, activation='sigmoid')
 ])
 
 model.compile(optimizer='adam',
-              loss='categorical_crossentropy',
+              loss='binary_crossentropy',
               metrics=['accuracy'])
 
 model.summary()
