@@ -36,11 +36,11 @@ length = len(tf_dataset)
 model = tf.keras.Sequential([
              tf.keras.Input(shape=10,),
              tf.keras.layers.Dropout(.1),
-             tf.keras.layers.Dense(500, activation = 'relu'),
+             tf.keras.layers.Dense(500, activation = 'sigmoid'),
              tf.keras.layers.Dropout(.2),
-             tf.keras.layers.Dense(500, activation = 'relu'),
+             tf.keras.layers.Dense(500, activation = 'sigmoid'),
              tf.keras.layers.Dropout(.2),
-             tf.keras.layers.Dense(500, activation='relu'),
+             tf.keras.layers.Dense(500, activation = 'sigmoid'),
              tf.keras.layers.Dropout(.3),
              tf.keras.layers.Dense(N, activation = 'softmax')
 ])
@@ -76,19 +76,19 @@ validation_loss = history.history['val_loss']
 epochs_range = range(epochs)
 
 # Plotting results
-plt.figure(figsize=(8, 8))
-plt.subplot(1, 2, 1)
-plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
-plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
-plt.legend(loc='lower right')
-plt.title('Training and Validation Accuracy')
+#plt.figure(figsize=(8, 8))
+#plt.subplot(1, 2, 1)
+#plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
+#plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
+#plt.legend(loc='lower right')
+#plt.title('Training and Validation Accuracy')
 
-plt.subplot(1, 2, 2)
-plt.plot(epochs_range, training_loss, label='Training Loss')
-plt.plot(epochs_range, validation_loss, label='Validation Loss')
-plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
-plt.show()
+#plt.subplot(1, 2, 2)
+#plt.plot(epochs_range, training_loss, label='Training Loss')
+#plt.plot(epochs_range, validation_loss, label='Validation Loss')
+#plt.legend(loc='upper right')
+#plt.title('Training and Validation Loss')
+#plt.show()
 
 
 # Saving results

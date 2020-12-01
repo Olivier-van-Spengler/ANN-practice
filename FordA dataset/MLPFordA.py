@@ -17,7 +17,7 @@ test_x, test_y = load_from_arff_to_dataframe(
 print(type(train_x))
 print(train_x.size)
 print(train_x.shape)
-train_x = np.reshape(3601, 500)
+#train_x = np.reshape(3601, 500)
 print(train_x.shape)
 # Convert to numpy.ndarray
 #train_x = np.ndarray(train_x)
