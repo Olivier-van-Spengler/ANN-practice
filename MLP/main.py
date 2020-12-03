@@ -7,18 +7,18 @@ import matplotlib.pyplot as plt
 from MLP.load_data import load_label,load_data
 
 # Import data
-labels = load_label('../matlab/l_10_1000.mat')
-dataset = load_data('../matlab/d_10_1000.mat')
+labels = load_label('../matlab/Mass spring system/l_Mass_Spring_10_1000.mat')
+dataset = load_data('../matlab/Mass spring system/d_Mass_Spring_10_1000.mat')
 print(type(labels))
 print(max(labels))
 
 tf_dataset = tf.data.Dataset.from_tensor_slices((dataset,labels))
 print(type(tf_dataset))
 
-i = 0
-for element,label in tf_dataset:
-    i += 1
-    print(f'Trajectory {i} | System {label}: {element}')
+#i = 0
+#or element,label in tf_dataset:
+#    i += 1
+#    print(f'Trajectory {i} | System {label}: {element}')
 
 # One hot encode
 ohe_labels = np.zeros((labels.size, labels.max()))
@@ -36,11 +36,11 @@ length = len(tf_dataset)
 model = tf.keras.Sequential([
              tf.keras.Input(shape=10,),
              tf.keras.layers.Dropout(.1),
-             tf.keras.layers.Dense(500, activation = 'sigmoid'),
+             tf.keras.layers.Dense(500, activation = 'relu'),
              tf.keras.layers.Dropout(.2),
-             tf.keras.layers.Dense(500, activation = 'sigmoid'),
+             tf.keras.layers.Dense(500, activation = 'relu'),
              tf.keras.layers.Dropout(.2),
-             tf.keras.layers.Dense(500, activation = 'sigmoid'),
+             tf.keras.layers.Dense(500, activation = 'relu'),
              tf.keras.layers.Dropout(.3),
              tf.keras.layers.Dense(N, activation = 'softmax')
 ])
@@ -57,7 +57,7 @@ model_weights_biases = model.get_weights()
 print('\nThere are {:,} NumPy ndarrays in our list\n'.format(len(model_weights_biases)))
 
 # Training
-epochs = 10
+epochs = 20
 batch_size = 5
 
 history = model.fit(element_train,

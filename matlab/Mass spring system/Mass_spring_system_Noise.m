@@ -15,10 +15,14 @@ for i = 1:N
     syss{end+1} = drss(n,p,m);
 end
 
+%Noise
 a = -1;
 b = 1;
-w_test = 2;
+w_test = 1;
 
+t0 = 0:0.001:10;
+y0 = [0.5, 0];
+[t,y] = ode45(@odefun,t0,y0);
 
 %Dataset
 label = randi(N,Size,1);
@@ -38,5 +42,11 @@ for i = 1:Size
     data{end+1} = Yz;
 end
 
-save('d_10_1000_n1.mat','data')
-save('l_10_1000_n1.mat', 'label')
+save('d_Mass_Spring_10_1000_n1.mat','data')
+save('l_Mass_Spring_10_1000_n1.mat', 'label')
+
+function dydt = odefun(~,x)
+    F = 1*x(1)^3 - 1*x(1)^2 + 1*x(1);
+    dydt = [x(2); 
+            - F - 0.1/50*x(2) - 2*x(1)];
+end

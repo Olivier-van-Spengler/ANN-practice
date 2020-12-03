@@ -15,10 +15,6 @@ for i = 1:N
     syss{end+1} = drss(n,p,m);
 end
 
-a = -1;
-b = 1;
-w_test = 1;
-
 
 %Dataset
 label = randi(N,Size,1);
@@ -34,9 +30,6 @@ for i = 1:Size
     x_0 = rand(n,1);
     [Y,Td,X] = lsim(sys,U,time,x_0); %x0=[0,0]
     data{end+1} = Y;
-    Ey = (a + (b-a).*rand(size(Y)))*w_test; %noise
-    Yz = Y + Ey;
-    data{end+1} = Yz;
 end
 
 save('dataset3.mat','data')
