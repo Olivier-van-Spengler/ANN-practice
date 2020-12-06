@@ -30,16 +30,10 @@ for i = 1:Size
     time = 0:dt:Tfinal;
     u0 = rand(size(time,2),m);
     U = u0;
-    x_0 = rand(n,1);
+    x_0 = dydt.m;
     [Y,Td,X] = lsim(sys,U,time,x_0); %x0=[0,0]
     data{end+1} = Y;
 end
 
 save('d_Mass_Spring_10_1000.mat','data')
 save('l_Mass_Spring_10_1000.mat', 'label')
-
-function dydt = odefun(~,x)
-    F = 1*x(1)^3 - 1*x(1)^2 + 1*x(1);
-    dydt = [x(2); 
-            - F - 0.1/50*x(2) - 2*x(1)];
-end
