@@ -60,12 +60,12 @@ def create_model(hidden_layers, nodes, dropout_rate, activation_function):
 
     # Compile the model
     adam = tf.keras.optimizers.Adam(lr=learn_rate)
-    model.compile(loss=loss_function, optimizer=adam, metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
 
 # Create the model
-model = tf.keras.wrappers.scikit_learn.KerasClassifier(build_fn=create_model, verbose=1)
+model = tf.keras.wrappers.scikit_learn.KerasClassifier(build_fn=create_model, verbose=2)
 
 #model.summary()
 
@@ -73,8 +73,8 @@ model = tf.keras.wrappers.scikit_learn.KerasClassifier(build_fn=create_model, ve
 # with the list of values that you wish to try out
 learn_rate = 1 #, 0.1, 1]
 dropout_rate = [0.0, 0.2, 0.4]
-batch_size = [10, 20]
-epochs = [25, 50]
+batch_size = 5
+epochs = 25
 nodes = [50, 100, 200, 400, 800]
 hidden_layers = [1, 2, 3]
 loss_function = 'categorical_crossentropy' # 'poisson', 'sparse_categorical_crossentropy']
@@ -84,9 +84,9 @@ seed = 42
 
 # Make a dictionary of the grid search parameters
 param_grid = dict(hidden_layers=hidden_layers, nodes=nodes, dropout_rate=dropout_rate,
-                  activation_function=activation_function, batch_size=batch_size, epochs=epochs
+                  activation_function=activation_function
                   )
-# loss_function=loss_function, learn_rate=learn_rate,
+# loss_function=loss_function, learn_rate=learn_rate, batch_size=batch_size, epochs=epochs
 
 # Build and fit the GridSearchCV
 # grid = sklearn.model_selection.GridSearchCV(estimator=model, param_grid=param_grid,
@@ -94,13 +94,18 @@ param_grid = dict(hidden_layers=hidden_layers, nodes=nodes, dropout_rate=dropout
 
 # Build and fit the RandomizedSearchCV
 grid = sklearn.model_selection.RandomizedSearchCV(estimator=model, param_distributions=param_grid,
-                                                  n_iter= 10,
-                    cv=sklearn.model_selection.KFold(random_state=seed), verbose=10)
+                                                  n_iter= 3, verbose=10)
+# cv=sklearn.model_selection.KFold(random_state=seed),
 
-grid_results = grid.fit(element_train, label_train)
+grid_results = grid.fit(element_train, label_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    #validation_data=(element_test, label_test)
+                        )
 
 # Summarize the results in a readable format
 print("Best: {0}, using {1}".format(grid_results.best_score_, grid_results.best_params_))
+
 
 means = grid_results.cv_results_['mean_test_score']
 stds = grid_results.cv_results_['std_test_score']
