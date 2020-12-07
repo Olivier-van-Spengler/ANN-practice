@@ -94,25 +94,35 @@ param_grid = dict(hidden_layers=hidden_layers, nodes=nodes, dropout_rate=dropout
 
 # Build and fit the RandomizedSearchCV
 grid = sklearn.model_selection.RandomizedSearchCV(estimator=model, param_distributions=param_grid,
-                                                  n_iter= 3, verbose=10)
+                                                  n_iter=50, verbose=10)
 # cv=sklearn.model_selection.KFold(random_state=seed),
 
+
+# Early stopping
+early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',
+                                                  verbose=10, patience=5,
+                                                  restore_best_weights='true')
+
+# Train model
 grid_results = grid.fit(element_train, label_train,
                     batch_size=batch_size,
                     epochs=epochs,
-                    #validation_data=(element_test, label_test)
-                        )
+                    validation_data=(element_test, label_test),
+                    callbacks=early_stopping)
+
 
 # Summarize the results in a readable format
 print("Best: {0}, using {1}".format(grid_results.best_score_, grid_results.best_params_))
 
+print(grid_results.best_estimator_)
 
 means = grid_results.cv_results_['mean_test_score']
 stds = grid_results.cv_results_['std_test_score']
 params = grid_results.cv_results_['params']
+time = grid_results.cv_results_['mean_fit_time']
 
-for mean, stdev, param in zip(means, stds, params):
-    print('{0} ({1}) with: {2}'.format(mean, stdev, param))
+for mean, stdev, param, time in zip(means, stds, params, time):
+    print('{0} ({1}) with: {2} in: {3} seconds'.format(mean, stdev, param, time))
 
 
 
