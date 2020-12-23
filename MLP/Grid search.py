@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from MLP.load_data import load_label,load_data
 
 # Import data
-labels = load_label('../matlab/Random linear and stable systems/l_10_1000.mat')
-dataset = load_data('../matlab/Random linear and stable systems/d_10_1000.mat')
+labels = load_label('../matlab/Random linear and stable systems/l_10_1000_n3.mat')
+dataset = load_data('../matlab/Random linear and stable systems/d_10_1000_n3.mat')
 print(type(labels))
 print(max(labels))
 
@@ -42,15 +42,15 @@ print(element_train.shape)
 N = max(labels)
 length = len(tf_dataset)
 
-def create_model(hidden_layers, nodes, dropout_rate, activation_function):
-    # loss_function, learn_rate, batch_size
+def create_model(hidden_layers, nodes, dropout_rate, activation_function, loss_function):
+    # , learn_rate, batch_size
     # Build model
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Dense(nodes, input_dim=10,
                                     kernel_initializer='normal', activation=activation_function))
     model.add(tf.keras.layers.Dropout(dropout_rate))
 
-    for i in range(hidden_layers):
+    for i in range(hidden_layers-1):
         # Add one hidden layer
         model.add(tf.keras.layers.Dense(nodes,
                                         kernel_initializer='normal', activation=activation_function))
@@ -60,41 +60,39 @@ def create_model(hidden_layers, nodes, dropout_rate, activation_function):
 
     # Compile the model
     adam = tf.keras.optimizers.Adam(lr=learn_rate)
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss=loss_function, optimizer='adam', metrics=['accuracy'])
     return model
 
 
 # Create the model
-model = tf.keras.wrappers.scikit_learn.KerasClassifier(build_fn=create_model, verbose=2)
+model = tf.keras.wrappers.scikit_learn.KerasClassifier(build_fn=create_model, verbose=1)
 
-#model.summary()
 
-# Define the parameters that you wish to use in your Grid Search along
-# with the list of values that you wish to try out
+# Grid parameters
 learn_rate = 1 #, 0.1, 1]
 dropout_rate = [0.0, 0.2, 0.4]
-batch_size = 5
-epochs = 25
-nodes = [50, 100, 200, 400, 800]
-hidden_layers = [1, 2, 3]
-loss_function = 'categorical_crossentropy' # 'poisson', 'sparse_categorical_crossentropy']
+batch_size = 10
+epochs = 50
+nodes = [200, 400, 600, 800, 1000]
+hidden_layers = [1, 2, 3, 4, 5]
+loss_function = ['categorical_crossentropy', 'poisson', 'sparse_categorical_crossentropy']
 activation_function = ['relu', 'tanh', 'sigmoid']
 
 seed = 42
 
 # Make a dictionary of the grid search parameters
 param_grid = dict(hidden_layers=hidden_layers, nodes=nodes, dropout_rate=dropout_rate,
-                  activation_function=activation_function
+                  activation_function=activation_function, loss_function=loss_function
                   )
-# loss_function=loss_function, learn_rate=learn_rate, batch_size=batch_size, epochs=epochs
+# , learn_rate=learn_rate, batch_size=batch_size, epochs=epochs
 
 # Build and fit the GridSearchCV
-# grid = sklearn.model_selection.GridSearchCV(estimator=model, param_grid=param_grid,
-   #                 cv=sklearn.model_selection.KFold(random_state=seed), verbose=10)
+grid = sklearn.model_selection.GridSearchCV(estimator=model, param_grid=param_grid,
+                    cv=sklearn.model_selection.KFold(random_state=seed), verbose=10)
 
-# Build and fit the RandomizedSearchCV
-grid = sklearn.model_selection.RandomizedSearchCV(estimator=model, param_distributions=param_grid,
-                                                  n_iter=50, verbose=10)
+# Build the RandomizedSearchCV
+#grid = sklearn.model_selection.RandomizedSearchCV(estimator=model, param_distributions=param_grid,
+ #                                                 n_iter=50, verbose=10)
 # cv=sklearn.model_selection.KFold(random_state=seed),
 
 
@@ -105,24 +103,26 @@ early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='min'
 
 # Train model
 grid_results = grid.fit(element_train, label_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    validation_data=(element_test, label_test),
-                    callbacks=early_stopping)
+                        batch_size=batch_size,
+                        epochs=epochs,
+                        validation_data=(element_test, label_test),
+                        callbacks=early_stopping)
 
 
 # Summarize the results in a readable format
-print("Best: {0}, using {1}".format(grid_results.best_score_, grid_results.best_params_))
+print("Best: {0}, using {1}".format(grid_results.best_score_,
+                                    grid_results.best_params_))
 
-print(grid_results.best_estimator_)
 
 means = grid_results.cv_results_['mean_test_score']
 stds = grid_results.cv_results_['std_test_score']
 params = grid_results.cv_results_['params']
 time = grid_results.cv_results_['mean_fit_time']
+rank = grid_results.cv_results_['rank_test_score']
 
-for mean, stdev, param, time in zip(means, stds, params, time):
-    print('{0} ({1}) with: {2} in: {3} seconds'.format(mean, stdev, param, time))
+
+for rank, mean, stdev, time, param in zip(rank, means, stds, time, params):
+    print('{0}; {1} ({2}) in: {3} seconds. With: {4}'.format(rank, mean, stdev, time, param))
 
 
 

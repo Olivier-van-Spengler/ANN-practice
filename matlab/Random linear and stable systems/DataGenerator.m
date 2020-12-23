@@ -32,5 +32,5 @@ for i = 1:Size
     data{end+1} = Y;
 end
 
-save('dataset3.mat','data')
-save('labels3.mat', 'label')
+save('d_10_1000.mat','data')
+save('l_10_1000.mat', 'label')
