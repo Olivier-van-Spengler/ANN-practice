@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from MLP.load_data import load_label,load_data
 
 # Import data
-labels = load_label('../matlab/Random linear and stable systems/l_10_1000_n3.mat')
-dataset = load_data('../matlab/Random linear and stable systems/d_10_1000_n3.mat')
+labels = load_label('../matlab/Random linear and stable systems/l_10_1000_nA1.mat')
+dataset = load_data('../matlab/Random linear and stable systems/d_10_1000_nA1.mat')
 print(type(labels))
 print(max(labels))
 
@@ -69,13 +69,13 @@ model = tf.keras.wrappers.scikit_learn.KerasClassifier(build_fn=create_model, ve
 
 
 # Grid parameters
-learn_rate = 1 #, 0.1, 1]
+learn_rate = 1
 dropout_rate = [0.0, 0.2, 0.4]
 batch_size = 10
-epochs = 50
+epochs = 100
 nodes = [200, 400, 600, 800, 1000]
-hidden_layers = [1, 2, 3, 4, 5]
-loss_function = ['categorical_crossentropy', 'poisson', 'sparse_categorical_crossentropy']
+hidden_layers = [1, 2, 3]
+loss_function = ['categorical_crossentropy', 'poisson'] #, 'sparse_categorical_crossentropy']
 activation_function = ['relu', 'tanh', 'sigmoid']
 
 seed = 42
@@ -125,4 +125,17 @@ for rank, mean, stdev, time, param in zip(rank, means, stds, time, params):
     print('{0}; {1} ({2}) in: {3} seconds. With: {4}'.format(rank, mean, stdev, time, param))
 
 
+# Plotting results
+#plt.figure(figsize=(8, 8))
+#plt.subplot(1, 2, 1)
+#plt.plot(epochs_range, training_accuracy, label='Training Accuracy')
+#plt.plot(epochs_range, validation_accuracy, label='Validation Accuracy')
+#plt.legend(loc='lower right')
+#plt.title('Training and Validation Accuracy')
 
+#plt.subplot(1, 2, 2)
+#plt.plot(epochs_range, training_loss, label='Training Loss')
+#plt.plot(epochs_range, validation_loss, label='Validation Loss')
+#plt.legend(loc='upper right')
+#plt.title('Training and Validation Loss')
+#plt.show()

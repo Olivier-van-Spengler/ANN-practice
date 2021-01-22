@@ -43,11 +43,11 @@ length = len(tf_dataset)
 model = tf.keras.Sequential([
              tf.keras.Input(shape=10,),
              #tf.keras.layers.Dropout(.1),
-             tf.keras.layers.Dense(400, activation = 'relu'),
+             #tf.keras.layers.Dense(400, activation = 'relu'),
              #tf.keras.layers.Dropout(.2),
-             tf.keras.layers.Dense(400, activation = 'relu'),
+             tf.keras.layers.Dense(800, activation = 'relu'),
              #tf.keras.layers.Dropout(.2),
-             tf.keras.layers.Dense(400, activation = 'relu'),
+             #tf.keras.layers.Dense(400, activation = 'relu'),
              #tf.keras.layers.Dropout(.3),
              tf.keras.layers.Dense(N, activation = 'softmax')
 ])
@@ -64,19 +64,19 @@ model_weights_biases = model.get_weights()
 print('\nThere are {:,} NumPy ndarrays in our list\n'.format(len(model_weights_biases)))
 
 # Training
-epochs = 150
+epochs = 500
 batch_size = 10
 
-early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',
-                                                  verbose=1, patience=3,
-                                                  restore_best_weights='true')
+#early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='min',
+ #                                                 verbose=1, patience=3,
+ #                                                 restore_best_weights='true')
 
 history = model.fit(element_train,
                     label_train,
                     batch_size=batch_size,
                     epochs=epochs,
-                    validation_data=(element_test, label_test),
-                    callbacks=early_stopping)
+                    validation_data=(element_test, label_test))
+                    #callbacks=early_stopping)
 print(history)
 
 

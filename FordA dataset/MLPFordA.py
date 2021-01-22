@@ -78,7 +78,7 @@ model = tf.keras.Sequential([
 ])
 
 model.compile(optimizer='adam',
-              loss='binary_crossentropy',
+              loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
 model.summary()

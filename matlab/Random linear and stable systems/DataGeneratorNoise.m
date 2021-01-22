@@ -16,8 +16,8 @@ for i = 1:N
 end
 
 a = -1;
-b = 1;
-w_test = 0.5;
+b = 0;
+w_test = 2;
 
 
 %Dataset
@@ -38,5 +38,5 @@ for i = 1:Size
     data{end+1} = Yz;
 end
 snr = norm(Y)/norm(Ey)
-save('d_10_1000_n3.mat','data')
-save('l_10_1000_n3.mat', 'label')
+save('d_10_1000_nA1.mat','data')
+save('l_10_1000_nA1.mat', 'label')
